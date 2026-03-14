@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>DebtSimplify - Groups</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Segoe UI, sans-serif;
+}
+
+body{
+display:flex;
+background:#f6f7fb;
+}
+
+/* Sidebar */
+
+.sidebar{
+width:240px;
+height:100vh;
+background:white;
+border-right:1px solid #eee;
+padding:25px 20px;
+}
+
+.logo{
+font-size:20px;
+font-weight:600;
+color:#6c63ff;
+margin-bottom:40px;
+}
+
+.menu{
+list-style:none;
+}
+
+.menu li{
+padding:12px;
+margin-bottom:8px;
+border-radius:8px;
+cursor:pointer;
+color:#555;
+}
+
+.menu li:hover{
+background:#f1efff;
+}
+
+.active{
+background:#eceaff;
+color:#6c63ff;
+}
+
+/* Main */
+
+.main{
+flex:1;
+padding:40px;
+}
+
+/* Header */
+
+.header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:30px;
+}
+
+.header h1{
+font-size:28px;
+}
+
+.subtitle{
+color:#777;
+margin-top:5px;
+}
+
+.new-btn{
+background:linear-gradient(90deg,#6c63ff,#7f53ff);
+color:white;
+border:none;
+padding:10px 20px;
+border-radius:8px;
+cursor:pointer;
+font-weight:500;
+}
+
+/* Groups Grid */
+
+.groups{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:35px;
+margin-top:40px;
+}
+
+.group{
+display:flex;
+align-items:center;
+gap:15px;
+cursor:pointer;
+}
+
+.icon{
+width:45px;
+height:45px;
+background:linear-gradient(135deg,#7b6cff,#5b4bff);
+border-radius:12px;
+display:flex;
+align-items:center;
+justify-content:center;
+color:white;
+font-size:18px;
+}
+
+.group-info{
+flex:1;
+}
+
+.group-name{
+font-weight:600;
+}
+
+.members{
+font-size:13px;
+color:#777;
+}
+
+.arrow{
+color:#bbb;
+}
+
+.footer-card{
+position:absolute;
+bottom:30px;
+left:20px;
+width:200px;
+background:#eceaff;
+padding:15px;
+border-radius:12px;
+font-size:13px;
+}
+
+.footer-card strong{
+display:block;
+color:#5a52ff;
+margin-bottom:4px;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- Sidebar -->
+
+<div class="sidebar">
+
+<div class="logo">⬅ DebtSimplify</div>
+
+<ul class="menu">
+<li>Dashboard</li>
+<li class="active">Groups</li>
+<li>Expenses</li>
+<li>Settlements</li>
+</ul>
+
+<div class="footer-card">
+<strong>Smart Debt Simplifier</strong>
+Minimize payments, maximize clarity.
+</div>
+
+</div>
+
+
+<!-- Main Content -->
+
+<div class="main">
+
+<div class="header">
+
+<div>
+<h1>Groups</h1>
+<div class="subtitle">Manage your expense groups</div>
+</div>
+
+<button class="new-btn">+ New Group</button>
+
+</div>
+
+
+<div class="groups" id="groupsList"></div>
+
+</div>
+
+
+<script>
+
+const groups = [
+
+{name:"bbsr", members:4, icon:"👥"},
+{name:"IIIT Trip", members:4, icon:"👥"},
+{name:"LAPTOP BUY", members:2, icon:"🛍"},
+{name:"birthday party", members:4, icon:"🎉"},
+{name:"Goa Trip 2025", members:4, icon:"✈"},
+{name:"Roommates", members:3, icon:"🏠"},
+{name:"Office Lunch", members:4, icon:"🍕"}
+
+];
+
+const container = document.getElementById("groupsList");
+
+groups.forEach(g => {
+
+container.innerHTML += `
+
+<div class="group">
+
+<div class="icon">${g.icon}</div>
+
+<div class="group-info">
+<div class="group-name">${g.name}</div>
+<div class="members">${g.members} members</div>
+</div>
+
+<div class="arrow">›</div>
+
+</div>
+
+`;
+
+});
+
+</script>
+
+</body>
+</html>
