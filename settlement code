@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>DebtSimplify</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family: 'Inter', sans-serif;
+}
+
+body{
+background:#f5f6fb;
+display:flex;
+height:100vh;
+}
+
+/* Sidebar */
+
+.sidebar{
+width:230px;
+background:white;
+border-right:1px solid #eee;
+padding:20px;
+display:flex;
+flex-direction:column;
+justify-content:space-between;
+}
+
+.logo{
+font-weight:600;
+font-size:20px;
+margin-bottom:30px;
+}
+
+.menu a{
+display:flex;
+gap:10px;
+padding:12px;
+text-decoration:none;
+color:#555;
+border-radius:10px;
+margin-bottom:8px;
+}
+
+.menu a.active{
+background:#ecebff;
+color:#5a5cff;
+}
+
+.card{
+background:#f1f1ff;
+padding:15px;
+border-radius:10px;
+font-size:14px;
+}
+
+/* Main */
+
+.main{
+flex:1;
+padding:30px;
+overflow:auto;
+}
+
+.header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:20px;
+}
+
+.header h2{
+font-weight:600;
+}
+
+.filter{
+padding:8px 12px;
+border:1px solid #ddd;
+border-radius:8px;
+}
+
+/* Chart */
+
+.chart-card{
+background:white;
+border-radius:15px;
+padding:25px;
+margin-bottom:25px;
+}
+
+.chart-title{
+margin-bottom:15px;
+font-weight:500;
+}
+
+/* settlements */
+
+.settlement-title{
+margin-bottom:15px;
+font-weight:600;
+}
+
+.settlement{
+background:white;
+padding:15px;
+border-radius:12px;
+display:flex;
+align-items:center;
+justify-content:space-between;
+margin-bottom:10px;
+}
+
+.person{
+display:flex;
+align-items:center;
+gap:10px;
+}
+
+.avatar{
+width:35px;
+height:35px;
+border-radius:50%;
+background:#ffd9d9;
+display:flex;
+align-items:center;
+justify-content:center;
+font-weight:600;
+color:#ff4d4d;
+}
+
+.receiver{
+display:flex;
+align-items:center;
+gap:10px;
+}
+
+.receiver .avatar{
+background:#c8f1dc;
+color:#1a9c5a;
+}
+
+.amount{
+color:#4a55ff;
+font-weight:500;
+}
+
+.arrow{
+margin:0 10px;
+color:#aaa;
+}
+
+.group{
+font-size:12px;
+color:#999;
+margin-bottom:5px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="sidebar">
+
+<div>
+<div class="logo">DebtSimplify</div>
+
+<div class="menu">
+<a>Dashboard</a>
+<a>Groups</a>
+<a>Expenses</a>
+<a class="active">Settlements</a>
+</div>
+</div>
+
+<div class="card">
+<b>Smart Debt Simplifier</b><br>
+Minimize payments, maximize clarity.
+</div>
+
+</div>
+
+
+<div class="main">
+
+<div class="header">
+<h2>Smart Debt Simplifier</h2>
+<select class="filter">
+<option>All Groups</option>
+</select>
+</div>
+
+
+<div class="chart-card">
+
+<div class="chart-title">Expense Distribution</div>
+
+<canvas id="chart" height="120"></canvas>
+
+</div>
+
+
+<div class="settlement-title">16 payments needed</div>
+
+<div id="settlementList"></div>
+
+</div>
+
+
+<script>
+
+/* Chart */
+
+const ctx = document.getElementById('chart');
+
+new Chart(ctx, {
+type:'doughnut',
+
+data:{
+labels:[
+"bbsr",
+"IIIT Trip",
+"Laptop Buy",
+"Birthday Party",
+"Goa Trip",
+"Roommates",
+"Office Lunch"
+],
+
+datasets:[{
+data:[30,15,10,8,12,13,12],
+
+backgroundColor:[
+"#5a5cff",
+"#7c6cff",
+"#21c3d6",
+"#24b47e",
+"#f59e0b",
+"#ef4444",
+"#ec4899"
+]
+}]
+},
+
+options:{
+plugins:{
+legend:{
+position:'bottom'
+}
+}
+}
+
+})
+
+
+
+/* settlements data */
+
+const settlements = [
+
+{from:"a",to:"b",amount:"₹20000000.00",group:"bbsr"},
+{from:"d",to:"b",amount:"₹20000000.00",group:"bbsr"},
+
+{from:"ranu",to:"happy",amount:"₹333.33",group:"IIIT Trip"},
+{from:"ranu",to:"rasmi",amount:"₹166.67",group:"IIIT Trip"},
+{from:"girish",to:"rasmi",amount:"₹166.67",group:"IIIT Trip"},
+
+{from:"shop",to:"happy",amount:"₹3000.00",group:"Laptop Buy"},
+
+{from:"rasmi",to:"girish",amount:"₹3000.00",group:"Birthday Party"},
+{from:"ranu",to:"girish",amount:"₹1000.00",group:"Birthday Party"},
+
+{from:"Priya",to:"Rahul",amount:"₹900.00",group:"Goa Trip 2025"},
+{from:"Aman",to:"Rahul",amount:"₹333.33",group:"Goa Trip 2025"},
+{from:"Aman",to:"Sara",amount:"₹333.33",group:"Goa Trip 2025"},
+
+{from:"Aman",to:"Rahul",amount:"₹1200.00",group:"Roommates"},
+{from:"Vikram",to:"Rahul",amount:"₹600.00",group:"Roommates"},
+
+{from:"Sara",to:"Priya",amount:"₹525.00",group:"Office Lunch"},
+{from:"Neha",to:"Priya",amount:"₹525.00",group:"Office Lunch"},
+{from:"Rahul",to:"Priya",amount:"₹25.00",group:"Office Lunch"}
+
+]
+
+
+
+const container = document.getElementById("settlementList");
+
+settlements.forEach(s=>{
+
+container.innerHTML += `
+
+<div class="group">${s.group}</div>
+
+<div class="settlement">
+
+<div class="person">
+<div class="avatar">${s.from[0].toUpperCase()}</div>
+${s.from}
+</div>
+
+<div class="amount">
+${s.amount}
+<span class="arrow">→</span>
+</div>
+
+<div class="receiver">
+${s.to}
+<div class="avatar">${s.to[0].toUpperCase()}</div>
+</div>
+
+</div>
+
+`
+
+})
+
+</script>
+
+</body>
+</html>
