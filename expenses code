@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>DebtSimplify</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Segoe UI;
+}
+
+body{
+background:#f6f7fb;
+display:flex;
+height:100vh;
+}
+
+/* SIDEBAR */
+
+.sidebar{
+width:230px;
+background:white;
+border-right:1px solid #e6e6e6;
+padding:20px;
+display:flex;
+flex-direction:column;
+}
+
+.logo{
+font-size:20px;
+font-weight:600;
+margin-bottom:30px;
+}
+
+.nav{
+display:flex;
+flex-direction:column;
+gap:10px;
+}
+
+.nav a{
+text-decoration:none;
+color:#555;
+padding:10px;
+border-radius:8px;
+}
+
+.nav a.active{
+background:#efeaff;
+color:#5b45ff;
+}
+
+.smart-box{
+margin-top:auto;
+background:#f1efff;
+padding:15px;
+border-radius:10px;
+font-size:13px;
+}
+
+/* MAIN */
+
+.main{
+flex:1;
+padding:30px;
+overflow-y:auto;
+}
+
+/* HEADER */
+
+.header{
+font-size:22px;
+font-weight:600;
+margin-bottom:20px;
+}
+
+/* TOP BAR */
+
+.topbar{
+display:flex;
+align-items:center;
+gap:10px;
+margin-bottom:20px;
+}
+
+.search{
+flex:1;
+padding:10px;
+border:1px solid #ddd;
+border-radius:8px;
+}
+
+.filter{
+padding:10px;
+border:1px solid #ddd;
+border-radius:8px;
+}
+
+.add-btn{
+margin-left:auto;
+background:#6a5cff;
+color:white;
+border:none;
+padding:10px 16px;
+border-radius:8px;
+cursor:pointer;
+}
+
+/* EXPENSE CARD */
+
+.card{
+background:white;
+border-radius:12px;
+padding:18px;
+margin-bottom:15px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+box-shadow:0 2px 6px rgba(0,0,0,0.05);
+}
+
+.card-left{
+display:flex;
+gap:15px;
+}
+
+.icon{
+width:40px;
+height:40px;
+background:#2dbd85;
+border-radius:10px;
+display:flex;
+align-items:center;
+justify-content:center;
+color:white;
+font-weight:bold;
+}
+
+.title{
+font-weight:600;
+margin-bottom:4px;
+}
+
+.subtitle{
+font-size:13px;
+color:#777;
+margin-bottom:5px;
+}
+
+.tags{
+display:flex;
+gap:6px;
+flex-wrap:wrap;
+}
+
+.tag{
+background:#eee;
+padding:3px 8px;
+border-radius:12px;
+font-size:11px;
+}
+
+.card-right{
+text-align:right;
+}
+
+.amount{
+font-weight:600;
+margin-bottom:8px;
+}
+
+.date{
+font-size:12px;
+color:#888;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+
+<div class="sidebar">
+
+<div class="logo">DebtSimplify</div>
+
+<div class="nav">
+<a href="#">Dashboard</a>
+<a href="#">Groups</a>
+<a class="active" href="#">Expenses</a>
+<a href="#">Settlements</a>
+</div>
+
+<div class="smart-box">
+<b>Smart Debt Simplifier</b><br>
+Minimize payments, maximize clarity.
+</div>
+
+</div>
+
+<!-- MAIN -->
+
+<div class="main">
+
+<div class="header">Smart Debt Simplifier</div>
+
+<h2>Expenses</h2>
+<p style="color:#777;margin-bottom:15px;">All transactions across groups</p>
+
+<div class="topbar">
+
+<input class="search" placeholder="Search by note or payer...">
+
+<select class="filter">
+<option>All Groups</option>
+</select>
+
+<button class="add-btn">+ Add Expense</button>
+
+</div>
+
+<div id="expenseList"></div>
+
+</div>
+
+<script>
+
+const expenses = [
+
+{
+title:"Expense",
+subtitle:"b paid · bbsr",
+tags:["a","d"],
+amount:"₹40000000.00",
+date:"Mar 14, 2026"
+},
+
+{
+title:"Expense",
+subtitle:"rasmi paid · IIIT Trip",
+tags:["happy"],
+amount:"₹500.00",
+date:"Mar 14, 2026"
+},
+
+{
+title:"Expense",
+subtitle:"happy paid · IIIT Trip",
+tags:["ranu"],
+amount:"₹500.00",
+date:"Mar 14, 2026"
+},
+
+{
+title:"Expense",
+subtitle:"happy paid · IIIT Trip",
+tags:["happy","girish","rasmi"],
+amount:"₹500.00",
+date:"Mar 14, 2026"
+},
+
+{
+title:"Expense",
+subtitle:"happy paid · LAPTOP BUY",
+tags:["shop"],
+amount:"₹30000.00",
+date:"Mar 14, 2026"
+},
+
+{
+title:"Expense",
+subtitle:"girish paid · birthday party",
+tags:["rasmi","ranu"],
+amount:"₹2000.00",
+date:"Mar 13, 2026"
+},
+
+{
+title:"Hotel booking for Goa",
+subtitle:"Rahul paid · Goa Trip 2025",
+tags:["Rahul","Aman","Sara","Priya"],
+amount:"₹2400.00",
+date:"Dec 15, 2025"
+},
+
+{
+title:"Dinner at beach shack",
+subtitle:"Sara paid · Goa Trip 2025",
+tags:["Rahul","Aman","Sara","Priya"],
+amount:"₹1200.00",
+date:"Dec 16, 2025"
+},
+
+{
+title:"Scuba diving tickets",
+subtitle:"Aman paid · Goa Trip 2025",
+tags:["Rahul","Aman","Sara"],
+amount:"₹800.00",
+date:"Dec 17, 2025"
+},
+
+{
+title:"Monthly rent share",
+subtitle:"Rahul paid · Roommates",
+tags:["Rahul","Aman","Vikram"],
+amount:"₹3000.00",
+date:"Jan 1, 2026"
+},
+
+{
+title:"Electricity bill",
+subtitle:"Vikram paid · Roommates",
+tags:["Rahul","Aman","Vikram"],
+amount:"₹600.00",
+date:"Jan 5, 2026"
+},
+
+{
+title:"Team lunch at Italian place",
+subtitle:"Priya paid · Office Lunch",
+tags:["Sara","Priya","Rahul","Neha"],
+amount:"₹1600.00",
+date:"Mar 10, 2026"
+},
+
+{
+title:"Coffee and snacks",
+subtitle:"Rahul paid · Office Lunch",
+tags:["Sara","Priya","Rahul","Neha"],
+amount:"₹500.00",
+date:"Mar 12, 2026"
+}
+
+];
+
+const container=document.getElementById("expenseList");
+
+expenses.forEach(e=>{
+
+let tags=e.tags.map(t=><span class="tag">${t}</span>).join("");
+
+container.innerHTML+=`
+
+<div class="card">
+
+<div class="card-left">
+
+<div class="icon">$</div>
+
+<div>
+<div class="title">${e.title}</div>
+<div class="subtitle">${e.subtitle}</div>
+<div class="tags">${tags}</div>
+</div>
+
+</div>
+
+<div class="card-right">
+<div class="amount">${e.amount}</div>
+<div class="date">${e.date}</div>
+</div>
+
+</div>
+
+`;
+
+});
+
+</script>
+
+</body>
+</html>
